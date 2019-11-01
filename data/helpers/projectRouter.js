@@ -59,7 +59,7 @@ router.post('/', validateNewProject, (req,res) => {
 router.post('/:id/action', validateNewAction, (req, res) => {
      const id = req.params.id 
      const action = {...req.body, project_id: id, completed: false}
-
+     console.log(action.description.length)
      db.get(id)
      .then(project => {
           if(project){
@@ -116,7 +116,7 @@ router.put('/:id', validateProjectId, (req, res)=> {
 
 
 
-// MIDDLEWARE 
+// * MIDDLEWARE 
 // TODO POST project authenticator
      // * requires name - description - completed 
 function validateNewProject(req, res, next){
@@ -132,24 +132,21 @@ function validateNewProject(req, res, next){
      }
 }
 
-
-
 // TODO POST action authenticator
      // * requires notes + description - completed 
 function validateNewAction(req, res, next){
      const action = req.body
+     console.log(action.description.length)
      if(action){
-          if (action.notes && action.description){
+          if (action.notes && action.description.length < 150){
                next();
           } else {
-               res.status(404).json({message: "Action notes or description is missing"})
+               res.status(404).json({message: "Action notes or description is invalid"})
           }
      } else {
           res.status(404).json({message: "Action content not valid"})
      }
 }
-
-
 
 // TODO Project id authenticator
 function validateProjectId(req, res, next){
