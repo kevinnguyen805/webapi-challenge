@@ -25,14 +25,29 @@ In this challenge, create a web API around the following resources: `Projects` a
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your Team Lead.
 
 - [ ] Mention two parts of Express that you learned about this week.
+Express is a JS framework that acts like React but for back-end. 
+- Rather than importing files/modules like react, Express uses require() as a way to import 
+- Turning on the server consists of opening a port and telling the server to listen to requests through that port
+- Route/Request Handlers (which can be separated into a different file using Express Router) execute code (handler function) when users arrive at an endpoint and make a request (HTTP method) 
+
 
 - [ ] Describe Middleware?
+Broadly speaking, middleware is software that extends functionality or services. 
+In this specific context of Node.JS, middleware is sort of like an array of functions that runs in the order it is queued in. 
+It can read, process, change, or end responses. 
+
 
 - [ ] Describe a Resource?
+A resource is something that can be automated or managed on an application such as users, posts, data, items, etc. It’s typically what our endpoints/URI manage. 
+
 
 - [ ] What can the API return to help clients know if a request was successful?
+The API can return a status code 200 and a JSON-ified message to let users know their request was successful.
+
 
 - [ ] How can we partition our application into sub-applications?
+We can partition our application into sub-applications using Express Routers. This allows us to have route handling files for each respective database file compiled into a folder, which can then be imported to a server.js file or index.js file. 
+
 
 ## Project Setup
 
