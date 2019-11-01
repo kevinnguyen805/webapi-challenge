@@ -9,6 +9,9 @@ router.get('/', (req,res) => {
      .then(project => {
           res.status(200).json(project)
      })
+     .catch(error => {
+          res.status(500).json({message: "Failed to retrieve project data"})
+     })
 })
 
 
@@ -18,6 +21,9 @@ router.get('/:id',(req,res) => {
      .then(project => {
           res.status(200).json(project)
      })
+     .catch(error => {
+          res.status(500).json({message: "Project ID does not exist"})
+     })
 })
 
 
@@ -26,6 +32,9 @@ router.get('/:id/action',(req,res) => {
      db.getProjectActions(req.params.id)
      .then(actions => {
           res.status(200).json(actions)
+     })
+     .catch(error => {
+          res.status(500).json({message: "Project ID does not exist"})
      })
 })
 
@@ -40,8 +49,10 @@ router.post('/', (req,res) => {
      .then(newProject => {
           res.status(200).json(newProject)
      })
+     .catch(error => {
+          res.status(500).json({message: "Failed to post new project"})
+     })
 })
-
 
 
 
@@ -68,8 +79,17 @@ router.post('/:id/action', (req, res) => {
      .catch(error => {
           res.status(500).json({message: "Project with ID does not exist"})
      })
-   
+})
 
+
+
+// TODO: DELETE USER PROJECT
+     // * returns # of deleted items
+router.delete('/:id', (req, res)=> {
+     db.remove(req.params.id)
+     .then(deleted => {
+          res.status(200).json(deleted)
+     })
 })
 
 
@@ -77,14 +97,13 @@ router.post('/:id/action', (req, res) => {
 
 
 
-// TODO: DELETE USER PROJECT
-
-
-
-
-
 // TODO: UPDATE USER PROJECT 
-
+router.put('/:id', (req, res)=> {
+     db.update(req.params.id, req.body)
+     .then(newPost => {
+          res.status(200).json(newPost)
+     })
+})
 
 
 
