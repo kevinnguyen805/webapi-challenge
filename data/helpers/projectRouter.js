@@ -16,7 +16,7 @@ router.get('/', (req,res) => {
 
 
 // TODO : GET PROJECT BY ID
-router.get('/:id',(req,res) => {
+router.get('/:id', validateProjectId, (req,res) => {
      db.get(req.params.id)
      .then(project => {
           res.status(200).json(project)
@@ -85,35 +85,66 @@ router.post('/:id/action', (req, res) => {
 
 // TODO: DELETE USER PROJECT
      // * returns # of deleted items
-router.delete('/:id', (req, res)=> {
+router.delete('/:id', validateProjectId, (req, res)=> {
      db.remove(req.params.id)
      .then(deleted => {
-          res.status(200).json(deleted)
+          if(deleted > 0){
+               res.status(200).json(deleted)
+          } else {
+               res.status(500).json({message : "Project failed to delete"})
+          }
+     })
+     .catch(error => {
+          res.status(500).json({message: "Project failed to delete"})
      })
 })
-
-
-
-
 
 
 // TODO: UPDATE USER PROJECT 
-router.put('/:id', (req, res)=> {
+router.put('/:id', validateProjectId, (req, res)=> {
      db.update(req.params.id, req.body)
      .then(newPost => {
-          res.status(200).json(newPost)
+          if(newPost > 0){
+               res.status(200).json(newPost)
+          } else {
+               res.status(500).json({ message: "Project failed to update" })
+          }
+     })
+     .catch(error => {
+          res.status(500).json({message: "Project failed to update"})
      })
 })
-
-
-
 
 
 
 
 // MIDDLEWARE 
+// TODO POST project authenticator
 
 
+
+
+// TODO POST action authenticator
+
+
+
+
+// TODO Project id authenticator
+function validateProjectId(req, res, next){
+     const id = req.params.id 
+
+     db.get(id)
+     .then(project => {
+          if(project){
+               next();
+          } else {
+               res.status(404).json({message: "Invalid project ID"})
+          }
+     })
+     .catch(error => {
+          res.status(500).json({message: "Project ID does not exist"})
+     })
+}
 
 
 
