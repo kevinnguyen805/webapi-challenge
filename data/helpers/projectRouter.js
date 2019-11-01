@@ -102,10 +102,10 @@ router.delete('/:id', validateProjectId, (req, res)=> {
 router.put('/:id', validateProjectId, (req, res)=> {
      db.update(req.params.id, req.body)
      .then(newPost => {
-          if(newPost > 0){
+          if(newPost){
                res.status(200).json(newPost)
           } else {
-               res.status(500).json({ message: "Project failed to update" })
+               res.status(500).json({ message: "Project update invalid" })
           }
      })
      .catch(error => {

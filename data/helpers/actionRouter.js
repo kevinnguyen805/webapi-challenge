@@ -46,7 +46,7 @@ router.delete('/:id', validateActionId, (req, res) => {
 router.put('/:id', validateActionId, (req, res) => {
      actionDB.update(req.params.id, req.body)
      .then(updateAction => {
-          if(updatedAction > 0){
+          if(updateAction){
                res.status(200).json(updateAction)
           } else {
                res.status(404).json({ message: "Action failed to update" })
