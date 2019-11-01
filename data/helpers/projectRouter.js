@@ -41,8 +41,7 @@ router.get('/:id/action',(req,res) => {
 
 
 // TODO: POST NEW PROJECT
-     // * requires name - description - completed 
-router.post('/', (req,res) => {
+router.post('/', validateNewProject, (req,res) => {
      const project = {...req.body, completed: false}
 
      db.insert(project)
@@ -57,8 +56,7 @@ router.post('/', (req,res) => {
 
 
 // TODO : POST NEW ACTION BY PROJECT ID 
-     // * requires notes + description - completed 
-router.post('/:id/action', (req, res) => {
+router.post('/:id/action', validateNewAction, (req, res) => {
      const id = req.params.id 
      const action = {...req.body, project_id: id, completed: false}
 
@@ -120,12 +118,36 @@ router.put('/:id', validateProjectId, (req, res)=> {
 
 // MIDDLEWARE 
 // TODO POST project authenticator
-
+     // * requires name - description - completed 
+function validateNewProject(req, res, next){
+     const project = req.body
+     if(project){
+          if(project.name && project.description){
+               next();
+          } else {
+               res.status(404).json({message: "Post name or description is missing"})
+          }
+     } else {
+          res.status(404).json({message: "Post content not valid"})
+     }
+}
 
 
 
 // TODO POST action authenticator
-
+     // * requires notes + description - completed 
+function validateNewAction(req, res, next){
+     const action = req.body
+     if(action){
+          if (action.notes && action.description){
+               next();
+          } else {
+               res.status(404).json({message: "Action notes or description is missing"})
+          }
+     } else {
+          res.status(404).json({message: "Action content not valid"})
+     }
+}
 
 
 
@@ -145,10 +167,5 @@ function validateProjectId(req, res, next){
           res.status(500).json({message: "Project ID does not exist"})
      })
 }
-
-
-
-
-
 
 module.exports = router
