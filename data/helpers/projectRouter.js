@@ -1,5 +1,6 @@
 const express = require('express')
 const db = require('./projectModel.js')
+const actionDB = require('./actionModel.js')
 const router = express.Router()
 
 // TODO : GET ALL PROJECTS
@@ -30,15 +31,46 @@ router.get('/:id/action',(req,res) => {
 
 
 
+// TODO: POST NEW PROJECT
+     // * requires name - description - completed 
+router.post('/', (req,res) => {
+     const project = {...req.body, completed: false}
 
-// TODO: POST NEW PROJET
+     db.insert(project)
+     .then(newProject => {
+          res.status(200).json(newProject)
+     })
+})
 
 
 
 
+// TODO : POST NEW ACTION BY PROJECT ID 
+     // * requires notes + description - completed 
+router.post('/:id/action', (req, res) => {
+     const id = req.params.id 
+     const action = {...req.body, project_id: id, completed: false}
 
-// TODO : POST NEW ACTION BY USER ID 
+     db.get(id)
+     .then(project => {
+          if(project){
+               actionDB.insert(action)
+               .then(action => {
+                    res.status(200).json(action)
+               })
+               .catch(error => {
+                    res.status(500).json({message: "New action failed to post"})
+               })
+          } else{
+               res.status(404).json({message: "Project with ID not found"})
+          }
+     })
+     .catch(error => {
+          res.status(500).json({message: "Project with ID does not exist"})
+     })
+   
 
+})
 
 
 
@@ -58,6 +90,9 @@ router.get('/:id/action',(req,res) => {
 
 
 
+
+
+// MIDDLEWARE 
 
 
 
